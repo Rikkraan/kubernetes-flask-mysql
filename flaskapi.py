@@ -22,9 +22,9 @@ def index():
     return "Hello, world!"
 
 
-@app.route("/add", methods=["POST"])
+@app.route("/create", methods=["POST"])
 def add_user():
-    """Function to add a user to the MySQL database"""
+    """Function to create a user to the MySQL database"""
     json = request.json
     name = json["name"]
     email = json["email"]
@@ -40,14 +40,13 @@ def add_user():
             conn.commit()
             cursor.close()
             conn.close()
-            resp = jsonify("User added successfully!")
+            resp = jsonify("User created successfully!")
             resp.status_code = 200
             return resp
         except Exception as exception:
             return jsonify(str(exception))
     else:
-        return jsonify("Not provided the right information "
-                       "or used the wrong method")
+        return jsonify("Please provide name, email and pwd")
 
 
 @app.route("/users", methods=["GET"])
@@ -110,8 +109,7 @@ def update_user():
         except Exception as exception:
             return jsonify(str(exception))
     else:
-        return jsonify("Not provided the right information or "
-                       "used the wrong method")
+        return jsonify("Please provide id, name, email and pwd")
 
 
 @app.route("/delete/<int:user_id>")

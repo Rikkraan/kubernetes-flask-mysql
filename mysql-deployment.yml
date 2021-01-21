@@ -51,4 +51,4 @@ spec:
     name: mysql
   selector:
     app: db
-  type: LoadBalancer
+  type: NodePort

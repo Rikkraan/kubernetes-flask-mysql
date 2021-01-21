@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: flaskapi
-          image: kubernetes-api
+          image: flask-api
           imagePullPolicy: Never
           ports:
             - containerPort: 5000
@@ -29,8 +29,7 @@ spec:
                   key: db_root_password
             - name: db_name
               value: flaskapi
-            - name: MYSQL_DB_HOST
-              value: mysql
+
 ---
 apiVersion: v1
 kind: Service

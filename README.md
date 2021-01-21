@@ -12,7 +12,7 @@ This repo contains code that
 1. Clone the repository
 2. Configure `Docker` to use the `Docker daemon` in your kubernetes cluster via your terminal: `eval $(minikube docker-env)`
 3. Pull the latest mysql image from `Dockerhub`: `Docker pull mysql`
-4. Build a kubernetes-api image with the Dockerfile in this repo: `Docker build . -t kubernetes-api`
+4. Build a kubernetes-api image with the Dockerfile in this repo: `Docker build . -t flask-api`
 
 ## Secrets
 `Kubernetes Secrets` can store and manage sensitive information. For this example we will define a password for the
@@ -33,20 +33,20 @@ You can check the status of the pods, services and deployments.
 
 ## Creating database and schema
 The API can only be used if the proper database and schemas are set. This can be done via the terminal.
-1. Get the IP of your `MySQL service`: `kubectl get services | grep mysql | awk '{print $3}'`
-2. Connect to your `MySQL database`: `mysql -u root -host <mysql service IP> -port 3306 -p`
-3. Enter the password specified in the `flaskapi-secrets.yml`
-4. Create the database and table
-   1. `CREATE DATABASE FLASKAPI;`
-    2. `USE FLASKAPI;`
-    3. `CREATE TABLE USERS(user_id INT PRIMARY KEY AUTO_INCREMENT, user_name VARCHAR(255), user_email VARCHAR(255), user_password VARCHAR(255));`
+1. Connect to your `MySQL database` by setting up a temporary pod as a `mysql-client`: 
+   `kubectl run -it --rm --image=mysql --restart=Never mysql-client -- mysql --host mysql --password=<super-secret-password>`
+   make sure to enter the (decoded) password specified in the `flaskapi-secrets.yml`
+2. Create the database and table
+   1. `CREATE DATABASE flaskapi;`
+    2. `USE flaskapi;`
+    3. `CREATE TABLE users(user_id INT PRIMARY KEY AUTO_INCREMENT, user_name VARCHAR(255), user_email VARCHAR(255), user_password VARCHAR(255));`
     
 ## Expose the API
 The API can be accessed by exposing it using minikube: `minikube service flask-service`. This will return a `URL`. If you paste this to your browser you will see the `hello world` message. You can use this `service_URL` to make requests to the `API`
 
 ## Start making requests
 Now you can use the `API` to `CRUD` your database
-1. add a user: `curl -H "Content-Type: application/json" -d '{"name": "<user_name>", "email": "<user_email>", "pwd": "<user_password>"}' <service_URL>/add`
+1. add a user: `curl -H "Content-Type: application/json" -d '{"name": "<user_name>", "email": "<user_email>", "pwd": "<user_password>"}' <service_URL>/create`
 2. get all users: `curl <service_URL>/users`
 3. get information of a specific user: `curl <service_URL>/user/<user_id>`
 4. delete a user by user_id: `curl -H "Content-Type: application/json" -d '{"name": "<user_name>", "email": "<user_email>", "pwd": "<user_password>"}' <service_URL>/delete`
