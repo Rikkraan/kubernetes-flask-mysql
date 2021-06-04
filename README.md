@@ -49,5 +49,5 @@ Now you can use the `API` to `CRUD` your database
 1. add a user: `curl -H "Content-Type: application/json" -d '{"name": "<user_name>", "email": "<user_email>", "pwd": "<user_password>"}' <service_URL>/create`
 2. get all users: `curl <service_URL>/users`
 3. get information of a specific user: `curl <service_URL>/user/<user_id>`
-4. delete a user by user_id: `curl -H "Content-Type: application/json" -d '{"name": "<user_name>", "email": "<user_email>", "pwd": "<user_password>"}' <service_URL>/delete`
+4. delete a user by user_id: `curl -H "Content-Type: application/json" <service_URL>/delete/<user_id>`
 5. update a user's information: `curl -H "Content-Type: application/json" -d {"name": "<user_name>", "email": "<user_email>", "pwd": "<user_password>", "user_id": <user_id>} <service_URL>/update`
